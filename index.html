@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff7ea">
+<title>ことり＆ノイズ（仮）</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>ことり＆ノイズ <small>（仮）</small></h1>
+    <nav>
+      <button data-tab="talk" class="on">おしゃべり</button>
+      <button data-tab="mine">マイ習慣</button>
+      <button data-tab="set">設定</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="tab-talk">
+      <div id="balloon" aria-live="polite"></div>
+      <div id="stage">
+        <button class="char" id="kotori" aria-label="ことり"><span class="body">🐤</span><span class="name">ことり</span></button>
+        <button class="char" id="noise" aria-label="ノイズ"><span class="body">🐈‍⬛</span><span class="name">ノイズ</span></button>
+      </div>
+      <div id="actions">
+        <button id="btn-talk" class="primary">💬 話す</button>
+        <button id="btn-src" disabled>📖 出典</button>
+        <button id="btn-add" disabled>＋ マイ習慣</button>
+      </div>
+      <p class="hint">キャラをタップしても話します。吹き出し中にタップで早送り。</p>
+    </section>
+
+    <section id="tab-mine" hidden>
+      <h2>マイ習慣</h2>
+      <p class="hint">「話す」で出た項目を「＋ マイ習慣」で入れると、毎日チェックできます。</p>
+      <ul id="mine-list"></ul>
+    </section>
+
+    <section id="tab-set" hidden>
+      <h2>設定</h2>
+      <label class="row">口調の強さ
+        <select id="set-tone">
+          <option value="gentle">やさしめ</option>
+          <option value="normal">ふつう</option>
+          <option value="snark">毒舌</option>
+        </select>
+      </label>
+      <label class="row">おまかせトーク（90秒ごと）
+        <input type="checkbox" id="set-auto">
+      </label>
+      <p class="hint" id="db-info"></p>
+      <p class="hint">健康の情報は、出典つきの「検証済み」項目だけを使っています。医療アドバイスではありません。体調に不安があるときは医師などに相談してください。</p>
+      <p class="hint">メンタル系の話題は、口調の設定に関わらず、からかわずにやさしく話す設計です。</p>
+    </section>
+  </main>
+
+  <div id="sheet" hidden>
+    <div class="sheet-bg" id="sheet-bg"></div>
+    <div class="sheet-body">
+      <button id="sheet-close" aria-label="閉じる">×</button>
+      <h3 id="sheet-claim"></h3>
+      <dl id="sheet-dl"></dl>
+    </div>
+  </div>
+</div>
+<noscript>JavaScriptを有効にしてください。</noscript>
+<script src="habits-data.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
