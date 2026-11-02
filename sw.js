@@ -1,6 +1,6 @@
 // 最小のService Worker: ネット優先、失敗したらキャッシュ（オフラインでも開ける）
-var CACHE = 'kn-v1';
-var SHELL = ['./', 'index.html', 'style.css', 'app.js', 'engine.js', 'habits-data.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
+var CACHE = 'kn-v2';
+var SHELL = ['./', 'index.html', 'style.css', 'app.js', 'engine.js', 'chars.js', 'habits-data.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
 });

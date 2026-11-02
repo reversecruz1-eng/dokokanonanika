@@ -13,6 +13,7 @@
 
   var state = {
     tone: load('kn.tone', 'normal'),
+    outfit: load('kn.outfit', 'maid'),
     auto: load('kn.auto', true),
     mine: load('kn.mine', []),
     checks: load('kn.checks', {}),
@@ -131,12 +132,48 @@
 
   // ---- タブ・設定 ----
   function switchTab(name) {
-    ['talk', 'mine', 'set'].forEach(function (t) { $('#tab-' + t).hidden = t !== name; });
+    ['talk', 'mine', 'lib', 'set'].forEach(function (t) { $('#tab-' + t).hidden = t !== name; });
     document.querySelectorAll('nav button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === name); });
     if (name === 'mine') renderMine();
+    if (name === 'lib') renderLib();
+  }
+
+  // ---- ライブラリ ----
+  function renderLib() {
+    var cat = $('#lib-cat').value, q = $('#lib-q').value.trim().toLowerCase();
+    var ul = $('#lib-list'); ul.textContent = '';
+    var list = verified.filter(function (e) {
+      if (cat && e.category !== cat) return false;
+      if (!q) return true;
+      var s = ((e.claim || '') + ' ' + (e.detail || '') + ' ' + ((e.source && e.source.org) || '')).toLowerCase();
+      return s.indexOf(q) >= 0;
+    });
+    $('#lib-count').textContent = list.length + '件';
+    if (!list.length) { var li = document.createElement('li'); li.className = 'empty'; li.textContent = '見つかりません。'; ul.appendChild(li); return; }
+    list.forEach(function (e) {
+      var li = document.createElement('li');
+      var c = document.createElement('div'); c.className = 'claim'; c.textContent = e.claim;
+      var chips = document.createElement('div'); chips.className = 'chips';
+      [KN.CATEGORY_NAMES[e.category] || e.category, (e.source && e.source.type) || '', '根拠 ' + e.evidence_level].forEach(function (t) {
+        if (!t) return; var s = document.createElement('span'); s.className = 'chip'; s.textContent = t; chips.appendChild(s);
+      });
+      li.appendChild(c); li.appendChild(chips);
+      li.onclick = function () { showSource(e); };
+      ul.appendChild(li);
+    });
   }
 
   function init() {
+    $('#kotori .body').innerHTML = window.KNCHAR.kotori();
+    $('#noise .body').innerHTML = window.KNCHAR.noise();
+    $('#kotori').setAttribute('data-outfit', state.outfit);
+    var catSel = $('#lib-cat');
+    var allOpt = document.createElement('option'); allOpt.value = ''; allOpt.textContent = 'すべて'; catSel.appendChild(allOpt);
+    var cats = []; verified.forEach(function (e) { if (cats.indexOf(e.category) < 0) cats.push(e.category); });
+    cats.forEach(function (c) { var o = document.createElement('option'); o.value = c; o.textContent = KN.CATEGORY_NAMES[c] || c; catSel.appendChild(o); });
+    catSel.onchange = renderLib; $('#lib-q').oninput = renderLib;
+    var outSel = $('#set-outfit'); outSel.value = state.outfit;
+    outSel.onchange = function () { state.outfit = outSel.value; save('kn.outfit', state.outfit); $('#kotori').setAttribute('data-outfit', state.outfit); };
     document.querySelectorAll('nav button').forEach(function (b) { b.onclick = function () { switchTab(b.dataset.tab); }; });
     $('#btn-talk').onclick = function () { talk(false); };
     $('#kotori').onclick = function () { talk(true); };
@@ -146,7 +183,7 @@
     $('#btn-add').onclick = function () {
       var e = state.current; if (!e || state.mine.indexOf(e.id) >= 0) return;
       state.mine.push(e.id); save('kn.mine', state.mine); refreshButtons();
-      play([{ who: 'kotori', text: 'マイ習慣に入れたよ！ 「マイ習慣」タブで毎日チェックできるよ。' }, { who: 'noise', text: '三日坊主でも、ゼロよりはええで。' }]);
+      play(KN.added({ tone: state.tone }));
     };
     $('#sheet-close').onclick = closeSheet; $('#sheet-bg').onclick = closeSheet;
 

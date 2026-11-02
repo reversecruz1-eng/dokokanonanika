@@ -16,7 +16,7 @@ header{padding:10px 14px 0}
 h1{font-size:18px;margin:0 0 8px} h1 small{font-weight:400;color:var(--muted)}
 nav{display:flex;gap:6px}
 nav button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--fg);
-  padding:8px 4px;border-radius:10px;font-size:14px}
+  padding:8px 2px;border-radius:10px;font-size:12.5px;white-space:nowrap}
 nav button.on{background:var(--accent);color:#2a2622;border-color:var(--accent);font-weight:700}
 main{flex:1;padding:12px 14px 24px}
 section[hidden]{display:none}
@@ -34,11 +34,21 @@ h2{font-size:16px;margin:4px 0 8px}
 
 #stage{display:flex;justify-content:space-between;align-items:flex-end;margin:10px 4px 4px}
 .char{background:none;border:0;padding:0;color:inherit;text-align:center;cursor:pointer}
-.char .body{display:block;font-size:64px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))}
-#noise .body{filter:grayscale(1) brightness(.6) drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+.char .body{display:block;line-height:0}
+.char .body svg{display:block;width:96px;height:auto;overflow:visible}
+#noise .body svg{width:92px}
 .char .name{display:inline-block;margin-top:2px;font-size:11px;padding:1px 9px;border-radius:9px;
   background:rgba(0,0,0,.45);color:#fff}
 .char.talking .body{animation:hop .35s ease-in-out infinite alternate}
+.mopen{display:none}
+.char.talking .mclosed{display:none}
+.char.talking .mopen{display:inline}
+#kotori[data-outfit=maid] .butler{display:none}
+#kotori[data-outfit=butler] .maid{display:none}
+.gl1,.gl2,.gl3{animation:glitch 2.6s steps(1,end) infinite}
+.gl2{animation-delay:-.9s}.gl3{animation-delay:-1.7s}
+@keyframes glitch{0%{transform:translateX(0);opacity:.75}8%{transform:translateX(5px);opacity:.2}12%{transform:translateX(-4px);opacity:.8}16%{transform:translateX(0);opacity:.75}60%{transform:translateX(0)}64%{transform:translateX(6px);opacity:.1}68%{transform:translateX(0);opacity:.75}100%{transform:translateX(0)}}
+@media (prefers-reduced-motion: reduce){.gl1,.gl2,.gl3,.char.talking .body{animation:none}}
 @keyframes hop{from{transform:translateY(0)}to{transform:translateY(-8px)}}
 
 #actions{display:flex;gap:8px;margin-top:8px}
@@ -72,3 +82,12 @@ dl{margin:0;font-size:13px;line-height:1.6}
 dt{color:var(--muted);font-size:11px;margin-top:8px}
 dd{margin:0;word-break:break-all}
 dd a{color:var(--accent)}
+
+.row2{display:flex;gap:8px;margin:6px 0}
+.row2 select{flex:0 0 38%}
+.row2 input{flex:1;min-width:0;font-size:14px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+#lib-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+#lib-list li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer}
+#lib-list .claim{font-size:14px;line-height:1.5}
+#lib-list .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:11px;padding:1px 8px;border-radius:9px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
